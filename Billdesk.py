@@ -1,1 +1,10 @@
-print("This is billdesk")
+from BillingModule import *
+tools=Tools()
+bd=Billdesk()
+bd.Heading()
+bd.AddLogoutBtn()
+bd.customerDetails()
+bd.products()
+bd.billOption()
+bd.billWindow()
+tools.eventLoop()
