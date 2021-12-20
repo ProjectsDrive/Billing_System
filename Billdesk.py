@@ -6,5 +6,6 @@ bd.AddLogoutBtn()
 bd.customerDetails()
 bd.products()
 bd.billOption()
-bd.billWindow()
+bd.cart()
+
 tools.eventLoop()

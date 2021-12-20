@@ -164,7 +164,16 @@ class EmpLogin:
 class Billdesk:
     def __init__(self):
         self.btnfont=15     #font size of button
-        self.lffont=16      #font size of labelframe  
+        self.lffont=16      #font size of labelframe 
+        self.i=0
+        self.j=1
+        self.category=StringVar()
+        self.product=StringVar()
+        self.quantity=StringVar()
+        self.price=StringVar()
+        self.productList=[]
+        self.addFrame=Frame(root,height=500,width=700,background="Yellow")
+        self.addFrame.place(x=630,y=180)
        
     def Heading(self):
         label1=Label(root,text="Billing System",font=("Georgia",30))
@@ -180,68 +189,108 @@ class Billdesk:
         button1.place(x=25,y=25)
     
     def customerDetails(self):
-        frame1=Frame(root,width=1320,height=100)
+        frame1=Frame(root,width=600,height=220)
         frame1.place(x=20,y=100)
-        lframe1=LabelFrame(frame1,width=1320,height=100,text="  Customer Details  ",font=("Times New Roman",self.lffont),padx=2,pady=3)
+        lframe1=LabelFrame(frame1,width=600,height=220,text="  Customer Details  ",font=("Times New Roman",self.lffont),padx=2,pady=3)
         lframe1.pack()
         #Customer name
         label1=Label(lframe1,text="Customer Name ",font=("Times new roman",15))
         label1.place(x=30,y=13)
         entry1=Entry(lframe1,font=("Times new roman",15),width=25)
-        entry1.place(x=170,y=13)
+        entry1.place(x=200,y=13)
 
         #Customer number
         label2=Label(lframe1,text="Customer Number ",font=("Times new roman",15))
-        label2.place(x=460,y=13)
+        label2.place(x=30,y=55)
         entry2=Entry(lframe1,font=("Times new roman",15),width=18)
-        entry2.place(x=620,y=13)
+        entry2.place(x=200,y=55)
 
         #Customer email
         label3=Label(lframe1,text="Customer Email ",font=("Times new roman",15))
-        label3.place(x=860,y=13)
+        label3.place(x=30,y=95)
         entry3=Entry(lframe1,font=("Times new roman",15),width=25)
-        entry3.place(x=1002,y=13)
+        entry3.place(x=200,y=95)
+
+        #Customer address
+        label4=Label(lframe1,text="Customer Address ",font=("Times new roman",15))
+        label4.place(x=30,y=135)
+        entry4=Entry(lframe1,font=("Times new roman",15),width=30)
+        entry4.place(x=200,y=135)
     
+    def addToCart(self):
+        self.i+=1
+        i=self.i
+        if len(self.productList)<20:
+            category=self.category.get()
+            product=self.product.get()
+            qty=int(self.quantity.get())
+            price=int(self.price.get())
+            total=price*qty
+            productDict={'Sl':self.i,'cat':category,'pro':product,'qty':qty,'price':price,'tot':total}
+            self.productList.append(productDict)
+            self.show()
+        else:
+            messagebox.showwarning("Overflow","Can\'t add new item")
+      
+    def show(self):
+        #addFrame=Frame(root,height=500,width=700,background="Yellow")
+        #addFrame.place(x=630,y=180)
+        l=self.productList
+        i=self.i
+        for x in l:
+            label1=Label(root,text=x['Sl'],font=('Times new roman',14),anchor='w')
+            label1.place(x=670,y=152+25*self.i)
+            label2=Label(root,text=x['cat'],font=('Times new roman',14),width=25,anchor='w')
+            label2.place(x=780,y=152+25*self.i)
+            label3=Label(root,text=x['pro'],font=('Times new roman',14),width=25,anchor='w')
+            label3.place(x=930,y=152+25*self.i)
+            label4=Label(root,text=x['qty'],font=('Times new roman',14),width=3,anchor='w')
+            label4.place(x=1055,y=152+25*self.i)
+            label5=Label(root,text=x['price'],font=('Times new roman',14),width=5,anchor='w')
+            label5.place(x=1130,y=152+25*self.i)
+            label6=Label(root,text=x['tot'],font=('Times new roman',14),width=6,anchor='w')
+            label6.place(x=1230,y=152+25*self.i)
+
     def products(self):
         frame1=Frame(root,height=420,width=600)
-        frame1.place(x=20,y=210)
+        frame1.place(x=20,y=323)
         lframe1=LabelFrame(frame1,height=420,width=600,text="  Products  ",font=("Times new roman",self.lffont))
         lframe1.pack()
 
         #Category
         label1=Label(lframe1,text="Select Category ",font=("Times new roman",15))
         label1.place(x=30,y=20)
-        entry1=ttk.Combobox(lframe1,font=("Times new roman",15),width=25)
+        entry1=ttk.Combobox(lframe1,font=("Times new roman",15),width=25,textvariable=self.category)
         entry1.place(x=170,y=20)
         entry1['values']=('C1','C2','C3')
 
         #Product
         label2=Label(lframe1,text="Select Product ",font=("Times new roman",15))
         label2.place(x=30,y=80)
-        entry2=ttk.Combobox(lframe1,font=("Times new roman",15),width=25)
+        entry2=ttk.Combobox(lframe1,font=("Times new roman",15),width=25,textvariable=self.product)
         entry2.place(x=170,y=80)
         entry2['values']=('P1','P2','P3')
 
         #Quantity
         label3=Label(lframe1,text="Quantity ",font=("Times new roman",15))
         label3.place(x=30,y=140)
-        entry3=Entry(lframe1,font=("Times new roman",15),width=5)
+        entry3=Entry(lframe1,font=("Times new roman",15),width=5,textvariable=self.quantity)
         entry3.place(x=170,y=140)
 
         #Price
-        label4=Label(lframe1,text="Price ",font=("Times new roman",15))
+        label4=Label(lframe1,text="Rate ",font=("Times new roman",15))
         label4.place(x=30,y=200)
-        entry4=Entry(lframe1,font=("Times new roman",15),width=8)
+        entry4=Entry(lframe1,font=("Times new roman",15),width=8,textvariable=self.price)
         entry4.place(x=170,y=200)
 
         #Individual Total
-        label5=Label(lframe1,text="Total ",font=("Times new roman",15))
+        label5=Label(lframe1,text="Amount ",font=("Times new roman",15))
         label5.place(x=30,y=260)
         entry5=Entry(lframe1,font=("Times new roman",15),width=8)
         entry5.place(x=170,y=260)
 
         #Add to Cart Btn
-        button1=Button(lframe1,text="Add to Cart",width=10,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
+        button1=Button(lframe1,text="Add to Cart",width=10,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.addToCart)
         button1.place(x=100,y=320)
 
         #Remove Item Btn
@@ -252,10 +301,13 @@ class Billdesk:
         button3=Button(lframe1,text="Clear",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
         button3.place(x=410,y=320)
     
+    def generate(self):
+        print(self.productList)
+    
     def billOption(self):
-        frame1=Frame(root,height=104,width=600)
-        frame1.place(x=20,y=640)
-        lframe1=LabelFrame(frame1,height=104,width=600,text="  Bill Options  ",font=("Times new roman",self.lffont))
+        frame1=Frame(root,height=58,width=700)
+        frame1.place(x=630,y=685)
+        lframe1=LabelFrame(frame1,height=58,width=700,text="",font=("Times new roman",self.lffont))
         lframe1.pack()
 
         #Grand Total Btn
@@ -263,21 +315,27 @@ class Billdesk:
         button1.place(x=100,y=10)
 
         #Generate Bill Btn
-        button2=Button(lframe1,text="Generate",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
+        button2=Button(lframe1,text="Generate",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.generate)
         button2.place(x=200,y=10)
 
-        #Clear Bill Btn
-        button3=Button(lframe1,text="Clear",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
+        #Search bills
+        button3=Button(lframe1,text="Search Bills",width=10,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.logout)
         button3.place(x=320,y=10)
-        button4=Button(lframe1,text="Exit",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
-        button4.place(x=420,y=10)
 
-    def billWindow(self):
-        frame1=Frame(root,height=535,width=700,background="Yellow")
-        frame1.place(x=630,y=210)
-        lframe1=LabelFrame(frame1,height=535,width=700,text="  Bill Window  ",font=("Times new roman",self.lffont))
+        #Clear Bill Btn
+        button4=Button(lframe1,text="Clear",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
+        button4.place(x=470,y=10)
+
+        #Exit button
+        button5=Button(lframe1,text="Exit",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
+        button5.place(x=570,y=10)
+
+    def cart(self):
+        frame1=Frame(root,height=590,width=700,background="Yellow")
+        frame1.place(x=630,y=100)
+        lframe1=LabelFrame(frame1,height=590,width=700,text="  Items Added  ",font=("Times new roman",self.lffont))
         lframe1.pack()
-
+        '''
         #For Searching a bill
         label1=Label(lframe1,text="Bill Number ",font=("Times new roman",15))
         label1.place(x=30,y=13)
@@ -285,13 +343,24 @@ class Billdesk:
         entry1.place(x=140,y=13)
         button1=Button(lframe1,text="Search",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.logout)
         button1.place(x=330,y=5)
-
-        #Bill Preview
+        '''
+        
+        #Items added
         frame2=Frame(lframe1,height=456,width=696)
-        frame2.place(x=0,y=52)
-        lframe2=LabelFrame(frame2,height=456,width=696)
-        lframe2.pack()
-        
-    
-        
-        
+        frame2.place(x=0,y=17)
+        label=Label(frame2,text="\t\t\t\t\t\t\t\t         ",font=("Times new roman bold",15),background="black")
+        label.place(x=1,y=5)
+        label=Label(frame2,text="\t\t\t\t\t\t\t\t         ",font=("Times new roman bold",15))
+        label.place(x=1,y=4)
+        label1=Label(frame2,text="Sl. No.",font=("Times new roman bold",15))
+        label1.place(x=30,y=2)
+        label2=Label(frame2,text="Category",font=("Times new roman bold",15))
+        label2.place(x=150,y=2)
+        label3=Label(frame2,text="Product",font=("Times new roman bold",15))
+        label3.place(x=300,y=2)
+        label4=Label(frame2,text="Qty",font=("Times new roman bold",15))
+        label4.place(x=420,y=2)
+        label5=Label(frame2,text="Rate",font=("Times new roman bold",15))
+        label5.place(x=500,y=2)
+        label6=Label(frame2,text="Amount",font=("Times new roman bold",15))
+        label6.place(x=600,y=2)                
