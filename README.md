@@ -8,4 +8,5 @@ This is a Desktop GUI developed with Python modules and developed by Arup Paul ,
 #Preview of Employee Login Page
 ![EmployeeLoginPage](https://user-images.githubusercontent.com/91828501/146214898-a3d11e76-d2e6-4984-a368-c84ea57e8594.jpg)
 #Preview of Billdesk
-![BillDesk](https://user-images.githubusercontent.com/91828501/146214998-a6f42964-65fd-4c35-9c3e-c656cbc3bdd8.jpg)
+![UpdatedBillDesk1](https://user-images.githubusercontent.com/91828501/146712206-12a48fd5-29ee-4e84-a4bf-f075b913f51b.jpg)
+
