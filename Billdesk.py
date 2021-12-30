@@ -5,6 +5,7 @@ bd.Heading()
 bd.AddLogoutBtn()
 bd.customerDetails()
 bd.products()
+bd.total()
 bd.billOption()
 bd.cart()
 

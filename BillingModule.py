@@ -93,8 +93,8 @@ class AdmLogin:
             messagebox.showerror("Error","All fields should be filled !")
         else:
             messagebox.showerror("Error","Invalid id or password !")
-            self.admId.set('')
             self.admPwd.set('')
+            self.admId.set('')           
     
     def buttonArea(self):
         button1=Button(root,text="Back",width=5,height=1,font=("Times New Roman",16),background="red",foreground="white",cursor="hand2",command=self.Exit)
@@ -174,6 +174,8 @@ class Billdesk:
         self.productList=[]
         self.addFrame=Frame(root,height=500,width=700,background="Yellow")
         self.addFrame.place(x=630,y=180)
+        #to remove item
+        self.sl=StringVar()
        
     def Heading(self):
         label1=Label(root,text="Billing System",font=("Georgia",30))
@@ -218,43 +220,61 @@ class Billdesk:
         entry4.place(x=200,y=135)
     
     def addToCart(self):
-        self.i+=1
-        i=self.i
-        if len(self.productList)<20:
-            category=self.category.get()
-            product=self.product.get()
-            qty=int(self.quantity.get())
-            price=int(self.price.get())
-            total=price*qty
-            productDict={'Sl':self.i,'cat':category,'pro':product,'qty':qty,'price':price,'tot':total}
-            self.productList.append(productDict)
-            self.show()
+        l=self.productList
+        category=self.category.get()
+        product=self.product.get()
+        qty=self.quantity.get()
+        price=self.price.get()
+        if(category!='' and product!='' and qty!='' and price!=''):
+            self.i+=1
+            i=self.i
+            if len(self.productList)<20:
+                category=self.category.get()
+                product=self.product.get()
+                qty=int(self.quantity.get())
+                price=int(self.price.get())
+                total=qty*price
+                productDict={'Sl':len(l)+1,'cat':category,'pro':product,'qty':qty,'price':price,'tot':total}
+                self.productList.append(productDict)
+                #print(self.productList)
+                self.show()
+            else:
+                messagebox.showwarning("Overflow","Can\'t add new item")
+            self.total()
+            #self.clr()
         else:
-            messagebox.showwarning("Overflow","Can\'t add new item")
+            messagebox.showwarning("Invalid","No item to add")
       
     def show(self):
-        #addFrame=Frame(root,height=500,width=700,background="Yellow")
-        #addFrame.place(x=630,y=180)
         l=self.productList
-        i=self.i
+        frame=Frame(root,height=510,width=696,background="white")
+        frame.place(x=631,y=177)   
         for x in l:
-            label1=Label(root,text=x['Sl'],font=('Times new roman',14),anchor='w')
-            label1.place(x=670,y=152+25*self.i)
-            label2=Label(root,text=x['cat'],font=('Times new roman',14),width=25,anchor='w')
-            label2.place(x=780,y=152+25*self.i)
-            label3=Label(root,text=x['pro'],font=('Times new roman',14),width=25,anchor='w')
-            label3.place(x=930,y=152+25*self.i)
-            label4=Label(root,text=x['qty'],font=('Times new roman',14),width=3,anchor='w')
-            label4.place(x=1055,y=152+25*self.i)
-            label5=Label(root,text=x['price'],font=('Times new roman',14),width=5,anchor='w')
-            label5.place(x=1130,y=152+25*self.i)
-            label6=Label(root,text=x['tot'],font=('Times new roman',14),width=6,anchor='w')
-            label6.place(x=1230,y=152+25*self.i)
+            label1=Label(root,text=x['Sl'],font=('Times new roman',14),anchor='w',background="white")
+            label1.place(x=670,y=152+25*x['Sl'])
+            label2=Label(root,text=x['cat'],font=('Times new roman',14),width=25,anchor='w',background="white")
+            label2.place(x=780,y=152+25*x['Sl'])
+            label3=Label(root,text=x['pro'],font=('Times new roman',14),width=25,anchor='w',background="white")
+            label3.place(x=930,y=152+25*x['Sl'])
+            label4=Label(root,text=x['qty'],font=('Times new roman',14),width=3,anchor='w',background="white")
+            label4.place(x=1055,y=152+25*x['Sl'])
+            label5=Label(root,text=x['price'],font=('Times new roman',14),width=5,anchor='w',background="white")
+            label5.place(x=1130,y=152+25*x['Sl'])
+            label6=Label(root,text=x['tot'],font=('Times new roman',14),width=6,anchor='w',background="white")
+            label6.place(x=1230,y=152+25*x['Sl'])
+
+    def clr(self):
+        self.price.set('')
+        self.quantity.set('')
+        self.product.set('')
+        self.category.set('')
+    
+  
 
     def products(self):
-        frame1=Frame(root,height=420,width=600)
+        frame1=Frame(root,height=340,width=600)
         frame1.place(x=20,y=323)
-        lframe1=LabelFrame(frame1,height=420,width=600,text="  Products  ",font=("Times new roman",self.lffont))
+        lframe1=LabelFrame(frame1,height=340,width=600,text="  Products  ",font=("Times new roman",self.lffont))
         lframe1.pack()
 
         #Category
@@ -283,52 +303,98 @@ class Billdesk:
         entry4=Entry(lframe1,font=("Times new roman",15),width=8,textvariable=self.price)
         entry4.place(x=170,y=200)
 
-        #Individual Total
-        label5=Label(lframe1,text="Amount ",font=("Times new roman",15))
-        label5.place(x=30,y=260)
-        entry5=Entry(lframe1,font=("Times new roman",15),width=8)
-        entry5.place(x=170,y=260)
-
         #Add to Cart Btn
         button1=Button(lframe1,text="Add to Cart",width=10,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.addToCart)
-        button1.place(x=100,y=320)
+        button1.place(x=170,y=250)
+
+        #Edit Btn
+        #button1=Button(lframe1,text="Edit",width=10,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.addToCart)
+        #button1.place(x=70,y=320)
 
         #Remove Item Btn
-        button2=Button(lframe1,text="Remove",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
-        button2.place(x=270,y=320)
+        #button2=Button(lframe1,text="Remove",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
+        #button2.place(x=270,y=320)
 
         #Clear individual item Btn
-        button3=Button(lframe1,text="Clear",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
-        button3.place(x=410,y=320)
+        button3=Button(lframe1,text="Clear",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.clr)
+        button3.place(x=320,y=250)
     
-    def generate(self):
-        print(self.productList)
+    def total(self):
+        tot=0
+        for x in self.productList:
+            tot=tot+x['tot']
+        frame1=Frame(root,height=67,width=600)
+        frame1.place(x=20,y=675)
+        lframe1=LabelFrame(frame1,height=67,width=600,text="",font=("Times new roman",self.lffont))
+        lframe1.pack()
+        label1=Label(lframe1,text="Grand Total : ",font=('Times new roman bold',18))
+        label1.place(x=10,y=15)
+        label2=Label(lframe1,text=tot,font=('Times new roman bold',20),foreground="red",width=6,anchor="w")
+        label2.place(x=180,y=12)
+
+    def remove(self):
+        sl=StringVar()
+        def removeItem():
+            l=self.productList
+            s=int(entry1.get())
+            if(s<=len(l)):
+                del l[s-1]
+                for x in range(s-1,len(l)):
+                    i=l[x]['Sl']
+                    print(x)
+                    l[x]['Sl']=i-1
+                print(self.productList)
+                messagebox.showinfo("Successful","Item removed successfully")
+                self.show()
+                self.total()
+            else:
+                messagebox.showwarning("Invalid","Item not found")
+            root.withdraw()
+        if(len(self.productList)>0):
+            root=Tk()
+            root.geometry('350x150')
+            root.title("Remove item")
+            root.iconbitmap('./Images/icon.ico')
+            
+            label1=Label(root,text="Enter Sl. No. of the product ",font=('Times new Roman',15))
+            label1.place(x=20,y=20)
+            entry1=Entry(root,width=5,font=('Times new Roman',15),textvariable=sl)
+            entry1.place(x=250,y=20)
+            button1=Button(root,text="Remove",background="red",foreground="white",font=('Times new Roman',13),command=removeItem)
+            button1.place(x=140,y=60)
+            root.mainloop()
+        else:
+            messagebox.showwarning("Empty","No item to remove")
     
+    def clear(self):
+        sure=messagebox.askyesno("Clear","Are you sure you want to clear the billdesk ?")
+        if(sure):
+            self.productList.clear()
+            self.show()
+            self.total()
+        
+        
     def billOption(self):
         frame1=Frame(root,height=58,width=700)
         frame1.place(x=630,y=685)
         lframe1=LabelFrame(frame1,height=58,width=700,text="",font=("Times new roman",self.lffont))
         lframe1.pack()
 
-        #Grand Total Btn
-        button1=Button(lframe1,text="Total",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
-        button1.place(x=100,y=10)
-
         #Generate Bill Btn
-        button2=Button(lframe1,text="Generate",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.generate)
-        button2.place(x=200,y=10)
+        button2=Button(lframe1,text="Generate",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
+        button2.place(x=130,y=10)
 
-        #Search bills
-        button3=Button(lframe1,text="Search Bills",width=10,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.logout)
-        button3.place(x=320,y=10)
+        #Edit bills
+        button3=Button(lframe1,text="Edit",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.logout)
+        button3.place(x=250,y=10)
 
-        #Clear Bill Btn
-        button4=Button(lframe1,text="Clear",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
-        button4.place(x=470,y=10)
+        #Remove Bill Btn
+        button4=Button(lframe1,text="Remove",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.remove)
+        button4.place(x=350,y=10)
 
-        #Exit button
-        button5=Button(lframe1,text="Exit",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
-        button5.place(x=570,y=10)
+        #clear button
+        button5=Button(lframe1,text="Clear",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.clear)
+        button5.place(x=470,y=10)
 
     def cart(self):
         frame1=Frame(root,height=590,width=700,background="Yellow")
@@ -363,4 +429,7 @@ class Billdesk:
         label5=Label(frame2,text="Rate",font=("Times new roman bold",15))
         label5.place(x=500,y=2)
         label6=Label(frame2,text="Amount",font=("Times new roman bold",15))
-        label6.place(x=600,y=2)                
+        label6.place(x=600,y=2)  
+        frame=Frame(root,height=510,width=696,background="white")
+        frame.place(x=631,y=177)              
+    
