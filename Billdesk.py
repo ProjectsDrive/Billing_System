@@ -7,6 +7,7 @@ bd.customerDetails()
 bd.products()
 bd.total()
 bd.billOption()
+bd.payment()
 bd.cart()
 
 tools.eventLoop()

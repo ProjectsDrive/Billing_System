@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 import os
+import subprocess
 
 #For Tkinter
 root=Tk()
@@ -171,11 +172,11 @@ class Billdesk:
         self.product=StringVar()
         self.quantity=StringVar()
         self.price=StringVar()
+        self.particular=StringVar()
         self.productList=[]
-        self.addFrame=Frame(root,height=500,width=700,background="Yellow")
-        self.addFrame.place(x=630,y=180)
         #to remove item
         self.sl=StringVar()
+        self.total()
        
     def Heading(self):
         label1=Label(root,text="Billing System",font=("Georgia",30))
@@ -228,7 +229,7 @@ class Billdesk:
         if(category!='' and product!='' and qty!='' and price!=''):
             self.i+=1
             i=self.i
-            if len(self.productList)<20:
+            if len(self.productList)<15:
                 category=self.category.get()
                 product=self.product.get()
                 qty=int(self.quantity.get())
@@ -241,13 +242,13 @@ class Billdesk:
             else:
                 messagebox.showwarning("Overflow","Can\'t add new item")
             self.total()
-            #self.clr()
+            self.clr()
         else:
             messagebox.showwarning("Invalid","No item to add")
       
     def show(self):
         l=self.productList
-        frame=Frame(root,height=510,width=696,background="white")
+        frame=Frame(root,height=402,width=696,background="white")
         frame.place(x=631,y=177)   
         for x in l:
             label1=Label(root,text=x['Sl'],font=('Times new roman',14),anchor='w',background="white")
@@ -268,6 +269,7 @@ class Billdesk:
         self.quantity.set('')
         self.product.set('')
         self.category.set('')
+        self.particular.set('')
     
   
 
@@ -278,18 +280,47 @@ class Billdesk:
         lframe1.pack()
 
         #Category
+        my_list=[]
+        def change(*args):
+            if(self.category.get()=="Chocolate"):
+                my_list.clear()
+                l=['Dairy Milk','Kit kat','5 Star','Snickers']
+                my_list.extend(l)
+                entry2['values']=my_list
+            elif(self.category.get()=="Biscuit"):
+                my_list.clear()
+                l=['Good Day','Bourbon','Oreo','Marie']
+                my_list.extend(l)
+                entry2['values']=my_list
+            elif(self.category.get()=="Soap"):
+                my_list.clear()
+                l=['Dettol','Lifebuoy','Sinthol','Lux','Savnol']
+                my_list.extend(l)
+                entry2['values']=my_list
+            elif(self.category.get()=="Snacks"):
+                my_list.clear()
+                l=['Lays','Kurkure','Uncle Chips']
+                my_list.extend(l)
+                entry2['values']=my_list
+            elif(self.category.get()==""):
+                my_list.clear()
+                entry2['values']=my_list
         label1=Label(lframe1,text="Select Category ",font=("Times new roman",15))
         label1.place(x=30,y=20)
         entry1=ttk.Combobox(lframe1,font=("Times new roman",15),width=25,textvariable=self.category)
         entry1.place(x=170,y=20)
-        entry1['values']=('C1','C2','C3')
+        entry1['values']=('','Chocolate','Biscuit','Soap','Snacks')
+        self.category.trace("w",change)
 
         #Product
+        pricelist={'':'0','Dairy Milk':'30','Kit kat':'20','5 Star':'25','Snickers':'25','Good Day':'30','Bourbon':'40','Oreo':'50','Marie':'30','Dettol':'10','Lifebuoy':'10','Sinthol':'12','Lux':'20','Savnol':'15','Lays':'20','Kurkure':'20','Uncle Chips':'20'}
+        def setPrice(*args):
+            self.price.set(pricelist[self.product.get()])
         label2=Label(lframe1,text="Select Product ",font=("Times new roman",15))
         label2.place(x=30,y=80)
-        entry2=ttk.Combobox(lframe1,font=("Times new roman",15),width=25,textvariable=self.product)
+        entry2=ttk.Combobox(lframe1,values=my_list,font=("Times new roman",15),width=25,textvariable=self.product)
         entry2.place(x=170,y=80)
-        entry2['values']=('P1','P2','P3')
+        self.product.trace('w',setPrice)
 
         #Quantity
         label3=Label(lframe1,text="Quantity ",font=("Times new roman",15))
@@ -319,13 +350,25 @@ class Billdesk:
         button3=Button(lframe1,text="Clear",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.clr)
         button3.place(x=320,y=250)
     
+    def payment(self):
+        frame1=Frame(root,height=65,width=600)
+        frame1.place(x=20,y=670)
+        lframe1=LabelFrame(frame1,height=65,width=600,text="  Payment Method  ",font=("Times new roman",self.lffont))
+        lframe1.pack()
+        label1=Label(lframe1,text="Particular",font=("Times New Roman",self.btnfont))
+        label1.place(x=15,y=5)
+        entry1=ttk.Combobox(lframe1,font=("Times new roman",15),width=25,textvariable=self.particular)
+        entry1.place(x=170,y=5)
+        entry1['values']=('Cash','Cheque','Net Banking','UPI','Debit Card','Credit Card')
+
+
     def total(self):
         tot=0
         for x in self.productList:
             tot=tot+x['tot']
-        frame1=Frame(root,height=67,width=600)
-        frame1.place(x=20,y=675)
-        lframe1=LabelFrame(frame1,height=67,width=600,text="",font=("Times new roman",self.lffont))
+        frame1=Frame(root,height=73,width=600)
+        frame1.place(x=630,y=590)
+        lframe1=LabelFrame(frame1,height=73,width=700,text="",font=("Times new roman",self.lffont))
         lframe1.pack()
         label1=Label(lframe1,text="Grand Total : ",font=('Times new roman bold',18))
         label1.place(x=10,y=15)
@@ -341,9 +384,9 @@ class Billdesk:
                 del l[s-1]
                 for x in range(s-1,len(l)):
                     i=l[x]['Sl']
-                    print(x)
+                    #print(x)
                     l[x]['Sl']=i-1
-                print(self.productList)
+                #print(self.productList)
                 messagebox.showinfo("Successful","Item removed successfully")
                 self.show()
                 self.total()
@@ -370,22 +413,103 @@ class Billdesk:
         sure=messagebox.askyesno("Clear","Are you sure you want to clear the billdesk ?")
         if(sure):
             self.productList.clear()
+            self.clr()
             self.show()
             self.total()
-        
+
+    def edit(self):
+        messagebox.showinfo("Under Construction","Coming Soon")
+
+    def generate(self):
+        root=Tk()
+        root.geometry('500x1000')
+        root.resizable(0,0)
+        root.title('Bill')
+        root.iconbitmap('./Images/icon.ico')
+        frame1=Canvas(root,height=1000,width=500,background="white")
+        frame1.place(x=1,y=1)
+        comName=Label(frame1,text='Company name',font=('Times new roman bold',20),background='white')
+        comName.place(x=150,y=10) 
+
+        def printBill():
+            messagebox.showinfo("Under construction","working on it ...")
+            '''frame1.postscript(file="tmp.ps",colormode='color')
+            process=subprocess.Popen(["ps2pdf","tmp.ps","bill.pdf"],shell=True)
+            process.wait()
+            os.remove('tmp.ps')'''
+           
+        btn=Button(frame1,text='Print',command=printBill)
+        btn.place(x=450,y=25)
+        comAddr=Label(frame1,text='Sarat Chandra Pally, Haiderpara, Siliguri-734006',font=('Times new roman',12),background='white')
+        comAddr.place(x=90,y=50)  
+        comPh=Label(frame1,text='Ph no. : ',font=('Times new roman',12),background='white')
+        comPh.place(x=160,y=75)  
+        comPhNo=Label(frame1,text='+917384599719',font=('Times new roman',12),background='white')
+        comPhNo.place(x=210,y=75)  
+        title=Label(frame1,text='**Tax Invoice**',font=('Times new roman bold',15),background='white')
+        title.place(x=170,y=100)
+        billId=Label(frame1,text='Bill Id : ',font=('Times new roman',12),background='white')
+        billId.place(x=30,y=130)
+        billIdNo=Label(frame1,text='B001 ',font=('Times new roman',12),background='white')
+        billIdNo.place(x=80,y=130)
+        date=Label(frame1,text='31-12-2021 ',font=('Times new roman',12),background='white')
+        date.place(x=280,y=130)
+        time=Label(frame1,text='10:35:49 PM ',font=('Times new roman',12),background='white')
+        time.place(x=380,y=130)
+        billTo=Label(frame1,text='Bill to - ',font=('Times new roman bold',14),background='white')
+        billTo.place(x=30,y=160)
+        cName=Label(frame1,text='Mr. Arup Paul ',font=('Times new roman',12),background='white')
+        cName.place(x=50,y=190)
+        cAddr=Label(frame1,text='Haiderpara, Siliguri, 734006 ',font=('Times new roman',12),background='white')
+        cAddr.place(x=50,y=210)
+        cPh=Label(frame1,text='Ph : ',font=('Times new roman',12),background='white')
+        cPh.place(x=50,y=231)
+        cPh=Label(frame1,text='9832371225',font=('Times new roman',12),background='white')
+        cPh.place(x=80,y=231)
+        label1=Label(frame1,text="Sl.",font=("Times new roman bold",12),background='white')
+        label1.place(x=45,y=265)
+        label2=Label(frame1,text="Category",font=("Times new roman bold",12),background='white')
+        label2.place(x=95,y=265)
+        label2=Label(frame1,text="Item",font=("Times new roman bold",12),background='white')
+        label2.place(x=185,y=265)
+        label4=Label(frame1,text="Qty",font=("Times new roman bold",12),background='white')
+        label4.place(x=275,y=265)
+        label5=Label(frame1,text="Rate",font=("Times new roman bold",12),background='white')
+        label5.place(x=335,y=265)
+        label6=Label(frame1,text="Amt",font=("Times new roman bold",12),background='white')
+        label6.place(x=415,y=265) 
+        label7=Label(frame1,text="---------------------------------------------------------------------------------",background='white')
+        label7.place(x=40,y=287)
+        #Items
+        for i in range(1,16):
+            label=Label(frame1,text=i,font=("Times new roman",10),background='white')
+            label.place(x=45,y=295+23*i)
+        label8=Label(frame1,text="---------------------------------------------------------------------------------",background='white')
+        label8.place(x=50,y=675)
+        label9=Label(frame1,text="Total : ",font=("Times new roman bold",12),background='white')
+        label9.place(x=70,y=695)
+        label10=Label(frame1,text="00000.00 ",font=("Times new roman bold",12),background='white')
+        label10.place(x=120,y=695)
+        label11=Label(frame1,text="Particular : ",font=("Times new roman bold",12),background='white')
+        label11.place(x=290,y=695)
+        label12=Label(frame1,text="Cash",font=("Times new roman bold",12),background='white')
+        label12.place(x=370,y=695)
+        endlabel=Label(frame1,text='***Thank you, Visit again***',font=('Times new roman bold',12),background='white')
+        endlabel.place(x=140,y=730)
+        root.mainloop()
         
     def billOption(self):
-        frame1=Frame(root,height=58,width=700)
-        frame1.place(x=630,y=685)
-        lframe1=LabelFrame(frame1,height=58,width=700,text="",font=("Times new roman",self.lffont))
+        frame1=Frame(root,height=65,width=700)
+        frame1.place(x=630,y=670)
+        lframe1=LabelFrame(frame1,height=65,width=700,text="",font=("Times new roman",self.lffont))
         lframe1.pack()
 
         #Generate Bill Btn
-        button2=Button(lframe1,text="Generate",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
+        button2=Button(lframe1,text="Generate",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.generate)
         button2.place(x=130,y=10)
 
         #Edit bills
-        button3=Button(lframe1,text="Edit",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.logout)
+        button3=Button(lframe1,text="Edit",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.edit)
         button3.place(x=250,y=10)
 
         #Remove Bill Btn
@@ -397,9 +521,9 @@ class Billdesk:
         button5.place(x=470,y=10)
 
     def cart(self):
-        frame1=Frame(root,height=590,width=700,background="Yellow")
+        frame1=Frame(root,height=482,width=700)
         frame1.place(x=630,y=100)
-        lframe1=LabelFrame(frame1,height=590,width=700,text="  Items Added  ",font=("Times new roman",self.lffont))
+        lframe1=LabelFrame(frame1,height=482,width=700,text="  Items Added  ",font=("Times new roman",self.lffont))
         lframe1.pack()
         '''
         #For Searching a bill
@@ -412,7 +536,7 @@ class Billdesk:
         '''
         
         #Items added
-        frame2=Frame(lframe1,height=456,width=696)
+        frame2=Frame(lframe1,height=400,width=696)
         frame2.place(x=0,y=17)
         label=Label(frame2,text="\t\t\t\t\t\t\t\t         ",font=("Times new roman bold",15),background="black")
         label.place(x=1,y=5)
@@ -430,6 +554,6 @@ class Billdesk:
         label5.place(x=500,y=2)
         label6=Label(frame2,text="Amount",font=("Times new roman bold",15))
         label6.place(x=600,y=2)  
-        frame=Frame(root,height=510,width=696,background="white")
+        frame=Frame(root,height=402,width=696,background="white")
         frame.place(x=631,y=177)              
     
