@@ -1,5 +1,5 @@
 # Billing_System
-This is a Desktop GUI developed with Python modules and developed by Arup Paul , Tushar Paul and Debashmita Chakraborty.
+This is a Desktop GUI developed with Python modules and developed by Arup Paul, Sangita Roy, Tushar Paul, Debashmita Chakraborty and Soumatya Dutta.
 
 #Preview of Main Page
 ![MainPage](https://user-images.githubusercontent.com/91828501/146214733-c2dbd237-5553-4e3f-85ab-00a49673dfc8.jpg)
