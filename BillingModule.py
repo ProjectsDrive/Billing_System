@@ -2,6 +2,7 @@ from ast import Str
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+from datetime import datetime
 import os
 import tempfile
 from unicodedata import category
@@ -162,85 +163,21 @@ class EmpLogin:
         button3=Button(root,text="Login",width=5,height=1,font=("Times New Roman",16),background="green",foreground="white",cursor="hand2",command=self.Login)
         button3.place(x=787,y=540)
 
-#Print Bill
-class Print_Bill:
-    def __init__(self):
-        root=Tk()
-        root.geometry('500x1000')
-        root.resizable(0,0)
-        root.title('Bill')
-        root.iconbitmap('./Images/icon.ico')
-        self.frame1=Canvas(root,height=1000,width=500,background="white")
-        self.frame1.place(x=1,y=1)
-        comName=Label(self.frame1,text='Company name',font=('Times new roman bold',20),background='white')
-        comName.place(x=150,y=10)   
-        btn=Button(self.frame1,text='Print',command=self.printBill)
-        btn.place(x=450,y=25)
-        comAddr=Label(self.frame1,text='Sarat Chandra Pally, Haiderpara, Siliguri-734006',font=('Times new roman',12),background='white')
-        comAddr.place(x=90,y=50)  
-        comPh=Label(self.frame1,text='Ph no. : ',font=('Times new roman',12),background='white')
-        comPh.place(x=160,y=75)  
-        comPhNo=Label(self.frame1,text='+917384599719',font=('Times new roman',12),background='white')
-        comPhNo.place(x=210,y=75)  
-        title=Label(self.frame1,text='**Tax Invoice**',font=('Times new roman bold',15),background='white')
-        title.place(x=170,y=100)
-        billId=Label(self.frame1,text='Bill Id : ',font=('Times new roman',12),background='white')
-        billId.place(x=30,y=130)
-        billIdNo=Label(self.frame1,text='B001 ',font=('Times new roman',12),background='white')
-        billIdNo.place(x=80,y=130)
-        date=Label(self.frame1,text='31-12-2021 ',font=('Times new roman',12),background='white')
-        date.place(x=280,y=130)
-        time=Label(self.frame1,text='10:35:49 PM ',font=('Times new roman',12),background='white')
-        time.place(x=380,y=130)
-        billTo=Label(self.frame1,text='Bill to - ',font=('Times new roman bold',14),background='white')
-        billTo.place(x=30,y=160)
-        cName=Label(self.frame1,text='Mr. Arup Paul ',font=('Times new roman',12),background='white')
-        cName.place(x=50,y=190)
-        cAddr=Label(self.frame1,text='Haiderpara, Siliguri, 734006 ',font=('Times new roman',12),background='white')
-        cAddr.place(x=50,y=210)
-        cPh=Label(self.frame1,text='Ph : ',font=('Times new roman',12),background='white')
-        cPh.place(x=50,y=231)
-        cPh=Label(self.frame1,text='9832371225',font=('Times new roman',12),background='white')
-        cPh.place(x=80,y=231)
-        label1=Label(self.frame1,text="Sl.",font=("Times new roman bold",12),background='white')
-        label1.place(x=45,y=265)
-        label2=Label(self.frame1,text="Category",font=("Times new roman bold",12),background='white')
-        label2.place(x=95,y=265)
-        label2=Label(self.frame1,text="Item",font=("Times new roman bold",12),background='white')
-        label2.place(x=185,y=265)
-        label4=Label(self.frame1,text="Qty",font=("Times new roman bold",12),background='white')
-        label4.place(x=275,y=265)
-        label5=Label(self.frame1,text="Rate",font=("Times new roman bold",12),background='white')
-        label5.place(x=335,y=265)
-        label6=Label(self.frame1,text="Amt",font=("Times new roman bold",12),background='white')
-        label6.place(x=415,y=265) 
-        label7=Label(self.frame1,text="---------------------------------------------------------------------------------",background='white')
-        label7.place(x=40,y=287)
-        #Items
-        for i in range(1,16):
-            label=Label(self.frame1,text=i,font=("Times new roman",10),background='white')
-            label.place(x=45,y=295+23*i)
-        label8=Label(self.frame1,text="---------------------------------------------------------------------------------",background='white')
-        label8.place(x=50,y=675)
-        label9=Label(self.frame1,text="Total : ",font=("Times new roman bold",12),background='white')
-        label9.place(x=70,y=695)
-        label10=Label(self.frame1,text="00000.00 ",font=("Times new roman bold",12),background='white')
-        label10.place(x=120,y=695)
-        label11=Label(self.frame1,text="Particular : ",font=("Times new roman bold",12),background='white')
-        label11.place(x=290,y=695)
-        label12=Label(self.frame1,text="Cash",font=("Times new roman bold",12),background='white')
-        label12.place(x=370,y=695)
-        endlabel=Label(self.frame1,text='***Thank you, Visit again***',font=('Times new roman bold',12),background='white')
-        endlabel.place(x=140,y=730)
-        root.mainloop()
-    def printBill(self):
-        pass
-
 #Billdesk
 class Billdesk:
     def __init__(self):
         self.btnfont=15     #font size of button
         self.lffont=16      #font size of labelframe 
+        #Date and time
+        now=datetime.now()
+        self.date_time=now.strftime(" %d-%m-%y %H:%M:%S")
+        #Customer 
+        self.cName=StringVar()
+        self.cAddress=StringVar()
+        self.cPh=StringVar()
+        self.cEmail=StringVar()
+        self.particular=StringVar()
+        #Product
         self.i=0
         self.j=1
         self.category=StringVar()
@@ -274,25 +211,25 @@ class Billdesk:
         #Customer name
         label1=Label(lframe1,text="Customer Name ",font=("Times new roman",15))
         label1.place(x=30,y=13)
-        entry1=Entry(lframe1,font=("Times new roman",15),width=25)
+        entry1=Entry(lframe1,font=("Times new roman",15),width=25,textvariable=self.cName)
         entry1.place(x=200,y=13)
 
         #Customer number
         label2=Label(lframe1,text="Customer Number ",font=("Times new roman",15))
         label2.place(x=30,y=55)
-        entry2=Entry(lframe1,font=("Times new roman",15),width=18)
+        entry2=Entry(lframe1,font=("Times new roman",15),width=18,textvariable=self.cPh)
         entry2.place(x=200,y=55)
 
         #Customer email
         label3=Label(lframe1,text="Customer Email ",font=("Times new roman",15))
         label3.place(x=30,y=95)
-        entry3=Entry(lframe1,font=("Times new roman",15),width=25)
+        entry3=Entry(lframe1,font=("Times new roman",15),width=25,textvariable=self.cEmail)
         entry3.place(x=200,y=95)
 
         #Customer address
         label4=Label(lframe1,text="Customer Address ",font=("Times new roman",15))
         label4.place(x=30,y=135)
-        entry4=Entry(lframe1,font=("Times new roman",15),width=30)
+        entry4=Entry(lframe1,font=("Times new roman",15),width=30,textvariable=self.cAddress)
         entry4.place(x=200,y=135)
     
     def addToCart(self):
@@ -343,10 +280,7 @@ class Billdesk:
         self.price.set('')
         self.quantity.set('')
         self.product.set('')
-        self.category.set('')
-        self.particular.set('')
-    
-  
+        self.category.set('')  
 
     def products(self):
         frame1=Frame(root,height=340,width=600)
@@ -412,14 +346,6 @@ class Billdesk:
         #Add to Cart Btn
         button1=Button(lframe1,text="Add to Cart",width=10,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.addToCart)
         button1.place(x=170,y=250)
-
-        #Edit Btn
-        #button1=Button(lframe1,text="Edit",width=10,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.addToCart)
-        #button1.place(x=70,y=320)
-
-        #Remove Item Btn
-        #button2=Button(lframe1,text="Remove",width=7,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2")
-        #button2.place(x=270,y=320)
 
         #Clear individual item Btn
         button3=Button(lframe1,text="Clear",width=5,height=1,font=("Times New Roman",self.btnfont),background="red",foreground="white",cursor="hand2",command=self.clr)
@@ -487,16 +413,18 @@ class Billdesk:
     def clear(self):
         sure=messagebox.askyesno("Clear","Are you sure you want to clear the billdesk ?")
         if(sure):
+            self.cName.set('')
+            self.cAddress.set('')
+            self.cPh.set('')
+            self.cEmail.set('')
+            self.particular.set('')
             self.productList.clear()
             self.clr()
             self.show()
             self.total()
 
     def edit(self):
-        messagebox.showinfo("Under Construction","Coming Soon")
-
-    
-
+        messagebox.showinfo("Under Construction","Coming Soon") 
 
     def generate(self):
         def print_bill():
@@ -504,49 +432,87 @@ class Billdesk:
             filename=tempfile.mktemp('.txt')
             open(filename,'w').write(q)
             os.startfile(filename,'Print')
-        self.root=Tk()
-        self.root.geometry('500x550')
-        self.root.resizable(0,0)
-        self.root.title('Bill')
-        self.root.iconbitmap('./Images/icon.ico')
-        self.frame1=Frame(self.root,width=500,height=5000,background="white")
-        self.frame1.place(x=0,y=0)
-        self.frame2=Frame(self.root,width=500,height=50,background='white')
-        self.frame2.place(x=0,y=450)
-        self.textarea=Text(self.frame1)
-        self.textarea.place(x=0,y=0)
-        self.textarea.delete(1.0,END)
-        self.textarea.insert(END,'Company Name\n')
-        self.textarea.insert(END,'Company Address\n')
-        self.textarea.insert(END,'Ph No. : +91 **********\n')
-        self.textarea.insert(END,'\nBill to --\n')
-        self.textarea.insert(END,'Customer name \n')
-        self.textarea.insert(END,'Customer address\n')
-        self.textarea.insert(END,'Customer Ph. No. : +91 **********\n')
-        self.textarea.insert(END,'\nSl.   Category\t\t  Product\t\tRate  \tQty\t  Amt\n')
-        self.textarea.insert(END,'---------------------------------------------------------------------------\n')
-        for x in self.productList:
-            sl=x['Sl']
-            category=x['cat']
-            product=x['pro']
-            rate=x['price']
-            qty=x['qty']
-            amt=x['tot']
-            self.textarea.insert(END,' ')
-            self.textarea.insert(END,sl)
-            self.textarea.insert(END,'   ')
-            self.textarea.insert(END,category)
-            self.textarea.insert(END,'\t\t')
-            self.textarea.insert(END,product)
-            self.textarea.insert(END,'\t\t')
-            self.textarea.insert(END,rate)
-            self.textarea.insert(END,'  \t')
-            self.textarea.insert(END,qty)
-            self.textarea.insert(END,'\t  ')
-            self.textarea.insert(END,amt)
+        cName=self.cName.get()
+        cAdd=self.cAddress.get()
+        cPh=self.cPh.get()
+        cEmail=self.cEmail.get()
+        particular=self.particular.get()
+        category=self.category.get()
+        product=self.product.get()
+        qty=self.quantity.get()
+        price=self.price.get()
+        if(cName!='' and cAdd!='' and cPh!='' and particular!='' and len(self.productList)!=0):
+            self.root=Tk()
+            self.root.geometry('500x550')
+            self.root.resizable(0,0)
+            self.root.title('Bill')
+            self.root.iconbitmap('./Images/icon.ico')
+            self.frame1=Frame(self.root,width=500,height=5000,background="white")
+            self.frame1.place(x=0,y=0)
+            self.frame2=Frame(self.root,width=500,height=50,background='white')
+            self.frame2.place(x=0,y=450)
+            self.textarea=Text(self.frame1)
+            self.textarea.place(x=0,y=0)
+            self.textarea.delete(1.0,END)
+            self.textarea.insert(END,' XYZ Departmental Store\n')
+            self.textarea.insert(END,' ABC Road, Siliguri\n')
+            self.textarea.insert(END,' +91 1234567890\n')
+            self.textarea.insert(END,' xyzdepartmentalstore@gmail.com\n')
             self.textarea.insert(END,'\n')
-        self.btn=Button(self.frame2,text="Print",command=print_bill)
-        self.btn.place(x=20,y=15)
+            self.textarea.insert(END,' Bill Number : ')
+            self.textarea.insert(END,' 0001**')
+            self.textarea.insert(END,'\n')
+            self.textarea.insert(END,self.date_time)
+            self.textarea.insert(END,'\n')
+            self.textarea.insert(END,'\n Bill to --\n')
+            self.textarea.insert(END,'\t')
+            self.textarea.insert(END,self.cName.get())
+            self.textarea.insert(END,'\n')
+            self.textarea.insert(END,'\t')
+            self.textarea.insert(END,self.cAddress.get())
+            self.textarea.insert(END,'\n')
+            self.textarea.insert(END,'\t')
+            self.textarea.insert(END,self.cPh.get())
+            self.textarea.insert(END,'\n')
+            self.textarea.insert(END,'\t')
+            self.textarea.insert(END,self.cEmail.get())
+            self.textarea.insert(END,'\n')
+            self.textarea.insert(END,'\nSl.   Category\t\t  Product\t\tRate  \tQty\t  Amt\n')
+            self.textarea.insert(END,'---------------------------------------------------------------------------\n')
+            total=0
+            for x in self.productList:
+                sl=x['Sl']
+                category=x['cat']
+                product=x['pro']
+                rate=x['price']
+                qty=x['qty']
+                amt=x['tot']
+                total=total+int(amt)
+                self.textarea.insert(END,' ')
+                self.textarea.insert(END,sl)
+                self.textarea.insert(END,'   ')
+                self.textarea.insert(END,category)
+                self.textarea.insert(END,'\t\t')
+                self.textarea.insert(END,product)
+                self.textarea.insert(END,'\t\t')
+                self.textarea.insert(END,rate)
+                self.textarea.insert(END,'  \t')
+                self.textarea.insert(END,qty)
+                self.textarea.insert(END,'\t  ')
+                self.textarea.insert(END,amt)
+                self.textarea.insert(END,'\n')
+            self.textarea.insert(END,'---------------------------------------------------------------------------\n')
+            self.textarea.insert(END,' Total : ')
+            self.textarea.insert(END,total)
+            self.textarea.insert(END,'/-')
+            self.textarea.insert(END,'\n')
+            self.textarea.insert(END,' Paricular : ')
+            self.textarea.insert(END,self.particular.get())
+            self.btn=Button(self.frame2,text="Print",command=print_bill)
+            self.btn.place(x=20,y=15)
+        else:
+            messagebox.showerror("Error"," All fields should be filled !")
+
     def billOption(self):
         frame1=Frame(root,height=65,width=700)
         frame1.place(x=630,y=670)
